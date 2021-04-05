@@ -1,3 +1,3 @@
-from objects.level import Level
-from objects.score import Score
-from objects.user import User
+from common.objects.level import Level
+from common.objects.score import Score
+from common.objects.user import Account
