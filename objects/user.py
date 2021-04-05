@@ -29,3 +29,4 @@ class Account:
     youtube: str
     twitter: str
     twitch: str
+    pp: int
