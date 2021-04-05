@@ -1,3 +1,3 @@
-from level import Level
-from score import Score
-from user import User
+from objects.level import Level
+from objects.score import Score
+from objects.user import User
