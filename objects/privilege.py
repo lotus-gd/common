@@ -1,5 +1,5 @@
 # The privilege group object.
-from constants import Privileges
+from common.constants import Privileges
 
 class PrivilegeGroup:
     """An object representing a group of users with the same privileges."""
