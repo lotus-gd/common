@@ -5,6 +5,8 @@ class Account:
     username: str = ""
     email: str = ""
     account_id: int = 0
+    is_admin: bool = False
+    user_id: int = 0
     register_date: int = 0
     privileges: int = 0
     stars: int = 0
@@ -29,4 +31,8 @@ class Account:
     youtube: str = ""
     twitter: str = ""
     twitch: str = ""
+    discord: str = ""
     pp: int = 0
+    is_bot: int = 0
+    ip: str = "127.0.0.1"
+    last_played: int = 0
