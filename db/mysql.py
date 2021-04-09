@@ -6,7 +6,6 @@ from typing import (
 )
 import aiomysql
 import asyncio
-from common.config import config
 
 class MySQLPool:
     """The wrapper around the `aiomysql` module. It allows for
@@ -153,6 +152,3 @@ class MySQLPool:
 
                 # Return it
                 return cur.lastrowid
-
-async def get_db():
-    return await MySQLPool.connect(config["db_host"], config["db_user"], config["db_password"], config["db_database"], config["db_port"])
