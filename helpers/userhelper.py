@@ -8,7 +8,6 @@ async def get_user(id: int):
     user = user[0]
     return Account(
         username=user[0],
-        password=user[1],
         email=user[2],
         is_admin=user[4],
         user_id=user[5],
@@ -45,7 +44,6 @@ async def get_user_by_name(name: str):
     user = user[0]
     return Account(
         username=user[0],
-        password=user[1],
         email=user[2],
         is_admin=user[4],
         user_id=user[5],
