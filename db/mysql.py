@@ -6,7 +6,7 @@ from typing import (
 )
 import aiomysql
 import asyncio
-from config import config
+from common.config import config
 
 class MySQLPool:
     """The wrapper around the `aiomysql` module. It allows for
