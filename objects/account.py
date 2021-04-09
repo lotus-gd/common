@@ -4,7 +4,6 @@ from dataclasses import dataclass
 class Account:
     username: str = ""
     email: str = ""
-    account_id: int = 0
     is_admin: bool = False
     user_id: int = 0
     register_date: int = 0
