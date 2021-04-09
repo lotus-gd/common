@@ -1,11 +1,12 @@
 # Taken from GDPyS (which I made). It is a class around aiomysql to allow
-# simple and quick usage of the MySQL database.
+# simple and quick usage of the MySQL database. -realistikdash
 from typing import (
     Union,
     Tuple
 )
 import aiomysql
 import asyncio
+from config import config
 
 class MySQLPool:
     """The wrapper around the `aiomysql` module. It allows for
@@ -152,3 +153,6 @@ class MySQLPool:
 
                 # Return it
                 return cur.lastrowid
+
+async def get_db():
+    return await MySQLPool.connect(config["db_host"], config["db_user"], config["db_password"], config["db_database"], config["db_port"])
