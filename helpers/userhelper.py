@@ -35,7 +35,13 @@ async def get_user(id: int):
         cp=user[28],
         ip=user[30],
         last_played=user[31],
-        diamonds=user[32]
+        diamonds=user[32],
+        orbs=user[33],
+        completed_level=user[34],
+        spider=user[35],
+        explosion=user[36],
+        banned=user[37],
+        pp=user[38]
     )
 
 async def get_user_by_name(name: str):
@@ -71,5 +77,11 @@ async def get_user_by_name(name: str):
         cp=user[28],
         ip=user[30],
         last_played=user[31],
-        diamonds=user[32]
+        diamonds=user[32],
+        orbs=user[33],
+        completed_level=user[34],
+        spider=user[35],
+        explosion=user[36],
+        banned=user[37],
+        pp=user[38]
     )
