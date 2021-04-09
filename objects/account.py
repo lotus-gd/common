@@ -21,6 +21,7 @@ class Account:
     wave: int = 0
     bird: int = 0
     robot: int = 0
+    dart: int = 0
     glow: bool = False
     cp: int = 0
     diamonds: int = 0
