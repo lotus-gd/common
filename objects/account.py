@@ -19,6 +19,7 @@ class Account:
     ship: int = 0
     ball: int = 0
     wave: int = 0
+    bird: int = 0
     robot: int = 0
     glow: bool = False
     cp: int = 0
