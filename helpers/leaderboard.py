@@ -1,10 +1,10 @@
-from db.mysql import get_db
-from config import config
+from common.db.mysql import get_db
+from common.config import config
 
 async def get_top_100():
     db = await get_db()
     users = await db.fetchall("SELECT * from leaderboard;")
-    print(users)
+    return users
     
 async def refresh_leaderboards():
     db = await get_db()
