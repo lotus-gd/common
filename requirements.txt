@@ -1,0 +1,2 @@
+aiomysql == 0.0.21
+uvloop == 0.15.2

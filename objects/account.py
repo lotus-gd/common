@@ -1,5 +1,6 @@
 from globals import sql
 from typing import List
+from constants import Privileges
 from .privilege import PrivilegeGroup
 import time
 
@@ -128,11 +129,11 @@ class Stats:
         # Set both to 0 if WE are restricted.
 
         glob_rank_db = await sql.fetchone(
-            "SELECT COUNT(*) FROM users WHERE pp > %s",
-            (self.pp,)
+            "SELECT COUNT(*) FROM users WHERE pp > %s AND privileges & %s",
+            (self.pp, Privileges.PUBLIC)
         )
 
-        self.global_rank = glob_rank_db[0]
+        self.global_rank = glob_rank_db[0] + 1
 
         # TODO: Country ranks
 
@@ -299,7 +300,24 @@ class Account:
             (self.last_active_ts, self.id)
         )
 
-    async def set_privilege_group(self) -> None:
+    async def set_privilege_group(self, group: PrivilegeGroup) -> None:
         """Sets the user's current privilege group in the database."""
 
-        ... # TODO
+        self.privilege_group = group
+
+        await sql.execute(
+            "UPDATE users SET privileges = %s WHERE id = %s LIMIT 1",
+            (group.privileges, self.id)
+        )
+    
+    @classmethod
+    async def from_sql(cls, user_id: int):
+        """Creates an instance of `Account` using data from the MySQL database.
+        
+        Args:
+            user_id (int): The ID of the user in the database.
+        """
+
+        usr = cls(user_id)
+        await usr.load(True)
+        return usr
