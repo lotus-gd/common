@@ -4,7 +4,8 @@ from common.objects.account import Account
 
 async def get_user(id: int):
     db = await get_db()
-    user = await db.fetchall("SELECT * from accounts WHERE user_id = %s;", id)[0]
+    user = await db.fetchall("SELECT * from accounts WHERE user_id = %s;", id)
+    user = user[0]
     return Account(
         username=user[0],
         password=user[1],
@@ -40,7 +41,8 @@ async def get_user(id: int):
 
 async def get_user_by_name(name: str):
     db = await get_db()
-    user = await db.fetchall("SELECT * from accounts WHERE username = %s;", name)[0]
+    user = await db.fetchall("SELECT * from accounts WHERE username = %s;", name)
+    user = user[0]
     return Account(
         username=user[0],
         password=user[1],
