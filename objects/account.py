@@ -1,4 +1,4 @@
-from helpers.crypt import bcrypt_check, bcrypt_hash
+from common.helpers.crypt import bcrypt_check, bcrypt_hash
 from common.globals import sql, user_cache, privilege_cache
 from typing import List
 from common.constants import Privileges

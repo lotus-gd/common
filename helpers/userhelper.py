@@ -1,4 +1,4 @@
-from common.globals import connect_sql, sql, connected
+from common.globals import sql
 from common.objects.account import Account
 
 def safe_name(name: str) -> str:
