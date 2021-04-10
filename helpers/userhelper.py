@@ -13,6 +13,19 @@ def safe_name(name: str) -> str:
 
     return name.rstrip().lower().replace(" ", "_")
 
+async def get_user(id: int) -> Account:
+    """Fetches user by id (shorthand for Account.from_sql(id))
+    
+    Note:
+        Please use `Account.from_sql` whenever you can as it is significantly
+            faster.
+    
+    Args:
+        id (int): The ID of a user
+    """
+
+    return await Account.from_sql(id)
+
 async def get_user_by_name(name: str) -> Account:
     """Fetches an account object by searching for a name.
     
