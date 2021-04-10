@@ -1,6 +1,6 @@
-from globals import sql
+from common.globals import sql
 from typing import List
-from constants import Privileges
+from common.constants import Privileges
 from .privilege import PrivilegeGroup
 import time
 

@@ -1,5 +1,4 @@
 from common.db.mysql import get_db
-from common.config import config
 from common.objects.account import Account
 
 async def get_user(id: int) -> Account:
