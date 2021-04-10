@@ -1,5 +1,5 @@
 # Idk what to do so i will just make a botch attempt to solve this.
-from db.mysql import MySQLPool
+from common.db.mysql import MySQLPool
 from common.config import config
 
 sql = MySQLPool()
