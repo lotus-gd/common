@@ -97,6 +97,7 @@ class Stats:
         self.coins: int = 0
         self.u_coins: int = 0
         self.demons: int = 0
+        self.attempts: int = 0
 
         # Icons
         self.display_icon: int = 0
@@ -144,7 +145,8 @@ class Stats:
 
         stats_db = await sql.fetchone(
             "SELECT pp, stars, coins, u_coins, demons, display_icon, icon, "
-            "ship, ufo, ball, robot, spider FROM users WHERE id = %s LIMIT 1",
+            "ship, ufo, ball, robot, spider, attempts FROM users WHERE "
+            "id = %s LIMIT 1",
             (self._user_id,)
         )
 
@@ -162,7 +164,8 @@ class Stats:
             self.ufo,
             self.ball,
             self.robot,
-            self.spider
+            self.spider,
+            self.attempts
         ) = stats_db
 
         await self.calculate_rank()
@@ -179,11 +182,11 @@ class Stats:
         await sql.execute(
             "UPDATE users SET pp=%s, stars=%s, coins=%s, u_coins=%s, demons=%s,"
             "display_icon=%s, icon=%s, ship=%s, ufo=%s, ball=%s, robot=%s,"
-            "spider=%s WHERE id = %s LIMIT 1",
+            "spider=%s, attempts=%s WHERE id = %s LIMIT 1",
             (
                 self.pp, self.stars, self.coins, self.u_coins, self.demons,
                 self.display_icon, self.icon, self.ship, self.ufo, self.ball,
-                self.robot, self.spider, self._user_id
+                self.robot, self.spider, self.attempts, self._user_id
             )
         )
 
