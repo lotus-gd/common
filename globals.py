@@ -4,7 +4,10 @@ from common.config import config
 
 sql = MySQLPool()
 
+connected = False
+
 async def connect_sql():
+    connected = True
     await sql.connect(
         config["db_host"],
         config["db_user"],

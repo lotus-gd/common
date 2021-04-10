@@ -1,9 +1,10 @@
-from common.db.mysql import get_db
+from common.globals import connect_sql, sql, connected
 from common.objects.account import Account
 
 async def get_user(id: int) -> Account:
-    db = await get_db()
-    user = await db.fetchall("SELECT * from accounts WHERE user_id = %s;", id)
+    if not connected:
+        await connect_sql()
+    user = await sql.fetchall("SELECT * from accounts WHERE user_id = %s;", id)
     user = user[0]
     acc = Account(user[5])
     acc.username =  user[0]
@@ -42,8 +43,9 @@ async def get_user(id: int) -> Account:
     return acc
 
 async def get_user_by_name(name: str) -> Account:
-    db = await get_db()
-    user = await db.fetchall("SELECT * from accounts WHERE username = %s;", name)
+    if not connected:
+        await connect_sql()
+    user = await sql.fetchall("SELECT * from accounts WHERE username = %s;", name)
     user = user[0]
     acc = Account(user[5])
     acc.username =  user[0]
