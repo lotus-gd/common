@@ -1,4 +1,5 @@
-from common.globals import sql
+from helpers.crypt import bcrypt_check, bcrypt_hash
+from common.globals import sql, user_cache, privilege_cache
 from typing import List
 from common.constants import Privileges
 from .privilege import PrivilegeGroup
@@ -253,7 +254,7 @@ class Account:
         self.register_ts = int(reg_ts)
         self.last_active_ts = int(l_a_ts)
 
-        # TODO: Privilege group logic
+        self.privilege_group = privilege_cache.get(priv)
 
         await self.stats.load_sql()
 
@@ -310,6 +311,27 @@ class Account:
             (group.privileges, self.id)
         )
     
+    def compare_pass(self, plain_pass: str) -> bool:
+        """Compares a plaintext using bcrypt to the user's password hash.
+        
+        Args:
+            plain_pass (str): A plaintext password to compare the hash
+                against.
+        
+        Returns:
+            `bool` corresponding to the passwords matching.
+        """
+
+        # TODO: Look into caching this as bcrypt by nature is slow.
+
+        return bcrypt_check(plain_pass, self.password_hash)
+    
+    def cache(self) -> None:
+        """Caches the user in a global cache for rapid future access."""
+
+        if not self.id: return
+        user_cache.cache(self.id, self)
+    
     @classmethod
     async def from_sql(cls, user_id: int):
         """Creates an instance of `Account` using data from the MySQL database.
@@ -321,3 +343,75 @@ class Account:
         usr = cls(user_id)
         await usr.load(True)
         return usr
+    
+    @classmethod
+    async def from_id(self, user_id: int):
+        """Fetches an instance of Account matching `user_id`.
+        
+        Note:
+            This does multiple lookups for the user in order of speed,
+                checking the cache first and if not found proceeding
+                to check the MySQL database. It also automatically
+                caches the object for future use.
+        
+        Args:
+            user_id (int): The ID of the user in the database.
+        """
+
+        # Check cache for really speedy returns.
+        if u_cache := user_cache.get(user_id): return u_cache
+
+        # We need to use the db.
+        u_db = await Account.from_sql(user_id)
+        # Cache it for later SPEED.
+        if u_db is not None: user_cache.cache(u_db.id, u_db)
+        return u_db
+    
+    @classmethod
+    async def register(cls, name: str, password: str, email: str, ip: str):
+        """Creates a new user in the database and returns an instance of
+        `Account` for that user.
+        
+        Args:
+            name (str): The username of the user.
+            password (str): The plaintext password for the user.
+            email (str): The email associated with the user.
+            ip (str): The IP of the user (used for geolocation).
+        """
+
+        # This will seriously mess up safe name lookups.
+        if "_" in name and " " in name:
+            raise ValueError(
+                "A username may not contain spaces and underscores"
+            )
+
+        # We cant import safe username func here as CIRCULAR IMPORTS.
+        safe_name = name.rstrip().lower().replace(" ", "_")
+
+        # Check if they already exist.
+        exists = await sql.fetchone(
+            "SELECT 1 FROM users WHERE safe_name = %s OR email = %s LIMIT 1",
+            (safe_name, email)
+        )
+
+        if exists:
+            raise Exception(
+                "A user with that name or email already exists."
+            )
+
+        # Hash password
+        password_hash = bcrypt_hash(password)
+        register_ts = int(time.time())
+
+        # TODO: IP geoloc.
+        country = "XX"
+
+        # Insert them.
+        u_id = await sql.execute(
+            "INSERT INTO users (name, safe_name, email, password, register_ts,"
+            "last_active_ts, country) VALUES (%s,%s,%s,%s,%s,%s,%s)",
+            (name, safe_name, email, password_hash, register_ts, register_ts,
+            country)
+        )
+
+        return Account.from_sql(u_id)
