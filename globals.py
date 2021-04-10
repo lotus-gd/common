@@ -2,7 +2,9 @@
 from common.helpers.cache import Cache
 from common.db.mysql import MySQLPool
 from common.config import config
+import uvloop
 
+loop = uvloop.new_event_loop()
 sql = MySQLPool()
 
 user_cache = Cache(
@@ -23,7 +25,8 @@ async def connect_sql():
         config["db_user"],
         config["db_password"],
         config["db_database"],
-        config["db_port"]
+        config["db_port"],
+        loop
     )
 
 async def pre_cache_privs() -> None:
@@ -33,6 +36,7 @@ async def pre_cache_privs() -> None:
 # List of coros that have to be ran on startup.
 STARTUP_COROS = (
     connect_sql,
+    pre_cache_privs
 )
 
 async def startup_init() -> None:
