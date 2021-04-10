@@ -16,8 +16,9 @@ badge_cache: dict = {}
 
 
 async def connect_sql():
+    global sql
     connected = True
-    await sql.connect(
+    sql = await MySQLPool.connect(
         config["db_host"],
         config["db_user"],
         config["db_password"],
