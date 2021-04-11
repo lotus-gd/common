@@ -22,7 +22,7 @@ class MySQLPool:
     def __init__(self):
         """Creates the default values for the connector. Use the `conntect`
         classmethod instead."""
-        self._pool: aiomysql.Pool
+        self._pool: aiomysql.Pool = None
         self.last_row_id: int = 0
         self._loop: asyncio.AbstractEventLoop
     
@@ -59,19 +59,48 @@ class MySQLPool:
         """
 
         cls = cls()
-        cls._loop = asyncio.get_event_loop() if loop is None else loop
 
-        # Ok so here we create the pool.
-        cls._pool = await aiomysql.create_pool(
+        cls.connect_local(
+            host,user,password,database,port,
+            asyncio.get_event_loop() if loop is None else loop
+        )
+
+        return cls
+    
+    async def connect_local(
+        self,
+        host: str,
+        user: str,
+        password: str,
+        database: str,
+        port: int = 3306,
+        loop: asyncio.AbstractEventLoop = None
+    ):
+        """Connects the current object to the pool without creating a new
+        object.
+        
+        Args:
+            host (str): The hostname of the MySQL server you would like to
+                connect. Usually `localhost`.
+            user (str): The username of the MySQL user you would like to log
+                into.
+            password (str): The password of the MySQL user you would like to
+                log into.
+            database (str): The database you would like to interact with.
+            port (int): The port at which the MySQL server is located at.
+                Default set to 3306.
+            loop (AbstractEventLoop): The event loop that should be used
+                for the MySQL pool. 
+        """
+
+        self._pool = await aiomysql.create_pool(
             host= host,
             port= port,
             user= user,
             password= password,
             db = database,
-            loop= cls._loop
+            loop= loop
         )
-
-        return cls
     
     async def fetchone(self, query: str, args: tuple = ()) -> Union[tuple, None]:
         """Executes `query` in MySQL and returns the first result.
