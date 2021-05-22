@@ -6,6 +6,8 @@ from typing import (
 )
 import aiomysql
 import asyncio
+import os
+from common.config import config # type: ignore
 
 class MySQLPool:
     """The wrapper around the `aiomysql` module. It allows for
@@ -115,7 +117,18 @@ class MySQLPool:
                 found.
             None if no results are found.
         """
-
+        if os.name == "nt":
+            loop = asyncio.get_event_loop()
+        else:
+            import uvloop
+            loop = uvloop.new_event_loop()
+        
+        await self.connect_local(config["db_host"],
+                                config["db_user"],
+                                config["db_password"],
+                                config["db_database"],
+                                config["db_port"],
+                                loop)
         # Fetch a connection from the pool.
         async with self._pool.acquire() as pool:
             # Grab a cur.
@@ -138,6 +151,18 @@ class MySQLPool:
             Tuple of tuples with the results found.
             
         """
+        if os.name == "nt":
+            loop = asyncio.get_event_loop()
+        else:
+            import uvloop
+            loop = uvloop.new_event_loop()
+        
+        await self.connect_local(config["db_host"],
+                                config["db_user"],
+                                config["db_password"],
+                                config["db_database"],
+                                config["db_port"],
+                                loop)
 
         # Fetch a connection from the pool.
         async with self._pool.acquire() as pool:
@@ -165,8 +190,19 @@ class MySQLPool:
         Returns:
             The ID of the last row affected.
         """
-
-         # Fetch a connection from the pool.
+        if os.name == "nt":
+            loop = asyncio.get_event_loop()
+        else:
+            import uvloop
+            loop = uvloop.new_event_loop()
+        
+        await self.connect_local(config["db_host"],
+                                config["db_user"],
+                                config["db_password"],
+                                config["db_database"],
+                                config["db_port"],
+                                loop)
+        # Fetch a connection from the pool.
         async with self._pool.acquire() as pool:
             # Grab a cur.
             async with pool.cursor() as cur:
