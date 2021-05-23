@@ -417,4 +417,4 @@ class Account:
             country)
         )
 
-        return Account.from_sql(u_id)
+        return await Account.from_sql(u_id)
