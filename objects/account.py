@@ -203,7 +203,7 @@ class Account:
 
         # Stuff
         self.name: str = ""
-        self.id: int = 0
+        self.id: int = user_id
         self.email: str = ""
         self.password_hash: str = "" # Idk whether to store it here... but oh well
         self.stats: Stats = Stats(user_id)
