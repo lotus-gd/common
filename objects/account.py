@@ -238,7 +238,7 @@ class Account:
         # SQL STUFF!!
         user_db = await sql.fetchone(
             "SELECT name, email, password, register_ts, last_active_ts, "
-            "privileges, country, pp FROM users WHERE id = %s LIMIT 1",
+            "privileges, country FROM users WHERE id = %s LIMIT 1",
             (self.id,)
         )
         if not user_db: return
@@ -251,8 +251,7 @@ class Account:
             reg_ts, # We have to convert the type
             l_a_ts, # We have to convert the type
             priv, # We need some priv group logic.
-            self.country,
-            self.pp
+            self.country
         ) = user_db
         
         # Type conversion.
