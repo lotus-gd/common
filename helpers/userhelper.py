@@ -39,7 +39,7 @@ async def get_all_users(limit=10):
     )
     for user, i in enumerate(users.reverse()):
         if i < limit+1:
-            acc = await Account.from_sql(id)
+            acc = await Account.from_sql(user)
             userlist.append(acc)
     return userlist 
 
