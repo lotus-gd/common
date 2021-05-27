@@ -4,13 +4,13 @@ from common.db.mysql import MySQLPool
 from common.config import config
 import os
 
-# Windows compatibillity.
-if os.name == "nt":
-    import asyncio
-    loop = asyncio.get_event_loop()
-else:
-    import uvloop
-    loop = uvloop.new_event_loop()
+# Windows compatibillity. (temp removed to make it work)
+#if os.name == "nt":
+import asyncio
+loop = asyncio.get_event_loop()
+#else:
+#    import uvloop
+#    loop = uvloop.new_event_loop()
 
 sql = MySQLPool()
 
