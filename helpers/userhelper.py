@@ -37,6 +37,7 @@ async def get_all_users(limit=10):
     users = await sql.fetchall(
         "SELECT id FROM users"
     )
+    users = list(users)
     for user, i in enumerate(users.reverse()):
         if i < limit+1:
             acc = await Account.from_sql(user)
