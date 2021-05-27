@@ -27,7 +27,7 @@ async def get_user(id: int) -> Account:
     return await Account.from_sql(id)
 
 async def get_total_users() -> int:
-    users = await sql.fetchone(
+    users = await sql.fetchall(
         "SELECT id FROM users"
     )
     return len(users)
