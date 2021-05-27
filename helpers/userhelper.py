@@ -30,7 +30,7 @@ async def get_total_users() -> int:
     users = await sql.fetchone(
         "SELECT id FROM users"
     )
-    return len(users[0])
+    return len(users)
 
 async def get_user_by_name(name: str) -> Account:
     """Fetches an account object by searching for a name.
