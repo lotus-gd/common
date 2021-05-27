@@ -32,6 +32,17 @@ async def get_total_users() -> int:
     )
     return len(users)
 
+async def get_all_users(limit=10):
+    userlist = []
+    users = await sql.fetchall(
+        "SELECT id FROM users"
+    )
+    for user, i in enumerate(users.reverse()):
+        if i < limit+1:
+            acc = await Account.from_sql(id)
+            userlist.append(acc)
+    return userlist 
+
 async def get_user_by_name(name: str) -> Account:
     """Fetches an account object by searching for a name.
     
