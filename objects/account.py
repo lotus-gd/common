@@ -210,7 +210,6 @@ class Account:
         self.register_ts: int = 0
         self.last_active_ts: int = 0
         self.country: str = "XX" # 2 letter upper.
-        self.pp = 0
 
         # Extra stuff
         self.badges: List[Badge] = []
