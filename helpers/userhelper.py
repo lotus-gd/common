@@ -1,6 +1,5 @@
 from common.globals import sql
-from common.objects.account import Account
-from common.objects.privilege import PrivilegeGroup
+from common.objects.account import Account, Badge
 
 def safe_name(name: str) -> str:
     """Creates a safe variant of the username. The safe name is:
@@ -76,6 +75,6 @@ async def get_badges():
     badges.reverse()
     for badge in badges:
         badge = badge[0]
-        temp = await Account.from_sql(badge)
+        temp = await Badge.from_sql(badge)
         badgelist.append(temp)
     return badgelist 
