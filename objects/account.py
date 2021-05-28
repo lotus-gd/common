@@ -284,9 +284,9 @@ class Account:
         """Saves the current user attributes in the MySQL database."""
 
         if not self.id: return
-
+        
         await sql.execute(
-            "UPDATE users SET name=%s, email=%s, password=%s, register_ts,"
+            "UPDATE users SET name=%s, email=%s, password=%s, register_ts=%s,"
             "last_active_ts=%s, country=%s WHERE id = %s LIMIT 1",
             (
                 self.name, self.email, self.password_hash, self.register_ts,
