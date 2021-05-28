@@ -210,6 +210,7 @@ class Account:
         self.register_ts: int = 0
         self.last_active_ts: int = 0
         self.country: str = "XX" # 2 letter upper.
+        self.privileges: int = 0
 
         # Extra stuff
         self.badges: List[Badge] = []
@@ -249,15 +250,15 @@ class Account:
             self.password_hash,
             reg_ts, # We have to convert the type
             l_a_ts, # We have to convert the type
-            priv, # We need some priv group logic.
+            self.privileges, # We need some priv group logic.
             self.country
         ) = user_db
         
         # Type conversion.
         self.register_ts = int(reg_ts)
         self.last_active_ts = int(l_a_ts)
-
-        self.privilege_group = privilege_cache.get(priv)
+        
+        self.privilege_group = privilege_cache.get(self.privileges)
 
         await self.stats.load_sql()
 
