@@ -1,5 +1,6 @@
 from common.globals import sql
 from common.objects.account import Account
+from common.objects.privilege import PrivilegeGroup
 
 def safe_name(name: str) -> str:
     """Creates a safe variant of the username. The safe name is:
@@ -65,3 +66,16 @@ async def get_user_by_name(name: str) -> Account:
     if not user_id_db: return
 
     return await Account.from_sql(user_id_db[0])
+
+async def get_privilege_groups():
+    privlist = []
+    priv_groups = await sql.fetchall(
+        "SELECT id FROM privilege_groups"
+    )
+    priv_groups = list(priv_groups)
+    priv_groups.reverse()
+    for priv in priv_groups:
+        priv = priv[0]
+        priv_group = await Account.from_sql(priv)
+        privlist.append(priv_group)
+    return privlist 
