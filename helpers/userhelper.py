@@ -67,15 +67,15 @@ async def get_user_by_name(name: str) -> Account:
 
     return await Account.from_sql(user_id_db[0])
 
-async def get_privilege_groups():
-    privlist = []
-    priv_groups = await sql.fetchall(
-        "SELECT id FROM privilege_groups"
+async def get_badges():
+    badgelist = []
+    badges = await sql.fetchall(
+        "SELECT id FROM badges"
     )
-    priv_groups = list(priv_groups)
-    priv_groups.reverse()
-    for priv in priv_groups:
-        priv = priv[0]
-        priv_group = await Account.from_sql(priv)
-        privlist.append(priv_group)
-    return privlist 
+    badges = list(badges)
+    badges.reverse()
+    for badge in badges:
+        badge = badge[0]
+        temp = await Account.from_sql(badge)
+        badgelist.append(temp)
+    return badgelist 
