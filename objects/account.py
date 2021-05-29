@@ -211,6 +211,7 @@ class Account:
         self.last_active_ts: int = 0
         self.country: str = "XX" # 2 letter upper.
         self.privileges: int = 0
+        self.ip: str = "0.0.0.0"
 
         # Extra stuff
         self.badges: List[Badge] = []
@@ -238,7 +239,7 @@ class Account:
         # SQL STUFF!!
         user_db = await sql.fetchone(
             "SELECT name, email, password, register_ts, last_active_ts, "
-            "privileges, country FROM users WHERE id = %s LIMIT 1",
+            "privileges, country, ip FROM users WHERE id = %s LIMIT 1",
             (self.id,)
         )
         if not user_db: return
@@ -251,7 +252,8 @@ class Account:
             reg_ts, # We have to convert the type
             l_a_ts, # We have to convert the type
             self.privileges, # We need some priv group logic.
-            self.country
+            self.country,
+            self.ip
         ) = user_db
         
         # Type conversion.
@@ -287,10 +289,10 @@ class Account:
         
         await sql.execute(
             "UPDATE users SET name=%s, email=%s, password=%s, register_ts=%s,"
-            "last_active_ts=%s, country=%s WHERE id = %s LIMIT 1",
+            "last_active_ts=%s, country=%s, ip=%s WHERE id = %s LIMIT 1",
             (
                 self.name, self.email, self.password_hash, self.register_ts,
-                self.last_active_ts, self.country, self.id
+                self.last_active_ts, self.country, self.ip, self.id
             )
         )
     
@@ -413,9 +415,9 @@ class Account:
         # Insert them.
         u_id = await sql.execute(
             "INSERT INTO users (name, safe_name, email, password, register_ts,"
-            "last_active_ts, country) VALUES (%s,%s,%s,%s,%s,%s,%s)",
+            "last_active_ts, country, ip) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",
             (name, safe_name, email, password_hash, register_ts, register_ts,
-            country)
+            country, ip)
         )
 
         return await Account.from_sql(u_id)
