@@ -1,5 +1,6 @@
 import gd
 from common.objects.level import Level
+from common.globals import sql
 
 async def get_level():
     pass
@@ -7,12 +8,18 @@ async def get_level():
 async def get_level_by_name():
     pass
 
-async def database_level():
+async def get_total_levels():
+    levels = await sql.fetchall(
+        "SELECT id FROM levels"
+    )
+    return len(levels)
+
+async def database_level(level_id: int):
     """
     Database level from robs servers using gd.py
     """
     client = gd.Client()
-    levels = await client.search_levels(filters=gd.Filters(demon_difficulty=gd.DemonDifficulty.EXTREME_DEMON), pages=range(34))
+    levels = await client.get_level(level_id)
     for l in levels:
         if isinstance(l.difficulty, gd.DemonDifficulty):
             demon_difficulty = l.difficulty.value
