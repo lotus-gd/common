@@ -419,5 +419,10 @@ class Account:
             (name, safe_name, email, password_hash, register_ts, register_ts,
             country, ip)
         )
+        
+        await sql.execute(
+            "INSERT INTO referrals (id, referer_id) VALUES (%s,%s)",
+            (u_id, referer)
+        )
 
         return await Account.from_sql(u_id)
