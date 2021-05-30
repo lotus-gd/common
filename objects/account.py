@@ -374,7 +374,7 @@ class Account:
         return u_db
     
     @classmethod
-    async def register(cls, name: str, password: str, email: str, ip: str, referer: int=0):
+    async def register(cls, name: str, password: str, email: str, ip: str, referrer: int=0):
         """Creates a new user in the database and returns an instance of
         `Account` for that user.
         
@@ -421,8 +421,8 @@ class Account:
         )
         
         await sql.execute(
-            "INSERT INTO referrals (id, referer_id) VALUES (%s,%s)",
-            (u_id, referer)
+            "INSERT INTO referrals (id, referrer_id) VALUES (%s,%s)",
+            (u_id, referrer)
         )
 
         return await Account.from_sql(u_id)
