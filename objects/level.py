@@ -20,6 +20,23 @@ class Level:
         self.uploaded_timestamp: int = 0
         self.length: int = 0
         self.objects: int = 0
+        
+    @classmethod
+    async def database(self, level_id: int, name: str, description: str,
+                       version: int, downloads: int, rating: int, score: int,
+                       creator: int, song_id: int, difficulty: int, demon_difficulty: int,
+                       password: int, rob_stars: int, coins: int, uploaded_timestamp: int,
+                       length: int, objects: int):
+        l_id = await sql.execute(
+            "INSERT INTO levels (id, name, description, version, downloads, rating, score,"
+            "creator, song_id, difficulty, demon_difficulty, password, rob_stars, "
+            "coins, uploaded_timestamp, length, objects) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)",
+            (level_id, name, description, version, downloads, rating, score,
+            creator, song_id, difficulty, demon_difficulty, password, rob_stars, 
+            coins, uploaded_timestamp, length, objects)
+        )
+        
+        return await Level.from_sql(l_id)
     
     async def load(self) -> None:
         user_db = await sql.fetchone(
@@ -73,6 +90,6 @@ class Level:
         return lvl
     
     @classmethod
-    async def from_id(self, user_id: int):
-        lvl = await Level.from_sql(user_id)
+    async def from_id(self, level_id: int):
+        lvl = await Level.from_sql(level_id)
         return lvl
