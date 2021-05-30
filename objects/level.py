@@ -34,7 +34,7 @@ class Level:
             (level_id)
         )
         
-        if exists: return Level.from_sql(level_id)
+        if exists: return await Level.from_sql(level_id)
         
         l_id = await sql.execute(
             "INSERT INTO levels (id, name, description, version, downloads, rating, score,"
