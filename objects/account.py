@@ -374,7 +374,7 @@ class Account:
         return u_db
     
     @classmethod
-    async def register(cls, name: str, password: str, email: str, ip: str):
+    async def register(cls, name: str, password: str, email: str, ip: str, referer: int=0):
         """Creates a new user in the database and returns an instance of
         `Account` for that user.
         
@@ -415,9 +415,9 @@ class Account:
         # Insert them.
         u_id = await sql.execute(
             "INSERT INTO users (name, safe_name, email, password, register_ts,"
-            "last_active_ts, country, ip) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",
+            "last_active_ts, country, ip, referer) VALUES (%s,%s,%s,%s,%s,%s,%s,%s, %s)",
             (name, safe_name, email, password_hash, register_ts, register_ts,
-            country, ip)
+            country, ip, referer)
         )
 
         return await Account.from_sql(u_id)
