@@ -27,6 +27,15 @@ class Level:
                        creator: int, song_id: int, difficulty: int, demon_difficulty: int,
                        password: int, rob_stars: int, coins: int, uploaded_timestamp: int,
                        length: int, objects: int):
+        
+        # does this level exist?
+        exists = await sql.fetchone(
+            "SELECT 1 FROM levels WHERE id = %s LIMIT 1",
+            (level_id)
+        )
+        
+        if exists: return Level.from_sql(level_id)
+        
         l_id = await sql.execute(
             "INSERT INTO levels (id, name, description, version, downloads, rating, score,"
             "creator, song_id, difficulty, demon_difficulty, password, rob_stars, "
@@ -36,7 +45,7 @@ class Level:
             coins, uploaded_timestamp, length, objects)
         )
         
-        return await Level.from_sql(l_id)
+        return await Level.from_sql(level_id)
     
     async def load(self) -> None:
         user_db = await sql.fetchone(
