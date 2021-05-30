@@ -415,9 +415,9 @@ class Account:
         # Insert them.
         u_id = await sql.execute(
             "INSERT INTO users (name, safe_name, email, password, register_ts,"
-            "last_active_ts, country, ip, referer) VALUES (%s,%s,%s,%s,%s,%s,%s,%s, %s)",
+            "last_active_ts, country, ip) VALUES (%s,%s,%s,%s,%s,%s,%s,%s)",
             (name, safe_name, email, password_hash, register_ts, register_ts,
-            country, ip, referer)
+            country, ip)
         )
 
         return await Account.from_sql(u_id)
